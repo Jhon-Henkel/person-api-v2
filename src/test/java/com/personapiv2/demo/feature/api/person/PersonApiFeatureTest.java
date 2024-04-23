@@ -79,6 +79,33 @@ public class PersonApiFeatureTest {
     }
 
     @Test
+    void testCreatePersonWithNullAddresses() throws Exception {
+        Map<String, Object> personMap = new HashMap<>();
+        personMap.put("fullName", "John Doe");
+        personMap.put("birthDate", LocalDate.of(2002, Month.MARCH, 30));
+        personMap.put("addresses", null);
+
+        mockMvc.perform(post("/api/v2/person")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(personMap)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", is("addresses must not be null")));
+    }
+
+    @Test
+    void testCreatePersonWithoutAddresses() throws Exception {
+        Map<String, Object> personMap = new HashMap<>();
+        personMap.put("fullName", "John Doe");
+        personMap.put("birthDate", LocalDate.of(2002, Month.MARCH, 30));
+
+        mockMvc.perform(post("/api/v2/person")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(personMap)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", is("se error: Missing required creator property 'addresses' (index 2)")));
+    }
+
+    @Test
     void testCreatePersonWithNullBirthDate() throws Exception {
         Map<String, Object> personMap = new HashMap<>();
         personMap.put("fullName", "John Doe");
