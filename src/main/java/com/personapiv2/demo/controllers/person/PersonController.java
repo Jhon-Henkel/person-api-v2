@@ -38,4 +38,9 @@ public class PersonController {
         Person updatePerson = this.personService.createPerson(person);
         return personService.update(id, updatePerson);
     }
+
+    @DeleteMapping("/{id}")
+    public void deletePerson(@PathVariable Long id) {
+        personService.delete(id);
+    }
 }

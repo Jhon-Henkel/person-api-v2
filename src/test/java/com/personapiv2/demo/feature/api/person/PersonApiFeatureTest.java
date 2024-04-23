@@ -162,4 +162,21 @@ public class PersonApiFeatureTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("Person not found with ID 999")));
     }
+
+    @Test
+    void testDeletePerson() throws Exception {
+        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+
+        mockMvc.perform(post("/api/v2/person")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(personDTO)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/api/v2/person/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/v2/person/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Person not found with ID 1")));
+    }
 }

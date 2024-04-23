@@ -77,4 +77,18 @@ public class PersonControllerFeatureTest {
         assertEquals("Jane Doe Doe", personUpdated.getFullName());
         assertEquals("2003-04-16", personUpdated.getBirthDate().toString());
     }
+
+    @Test
+    void testDeletePerson() {
+        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+
+        Person person = this.personController.createPerson(personDTO).getBody();
+
+        assert person != null;
+        Long id = person.getId();
+
+        this.personController.deletePerson(id);
+
+        assertEquals(0, this.personController.readAllPersons().size());
+    }
 }

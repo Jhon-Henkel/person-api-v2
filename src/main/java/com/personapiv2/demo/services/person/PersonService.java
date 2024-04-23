@@ -38,4 +38,8 @@ public class PersonService {
         personToUpdate.setBirthDate(person.getBirthDate());
         return this.personRepository.save(personToUpdate);
     }
+
+    public void delete(Long id) {
+        this.personRepository.deleteById(id);
+    }
 }
