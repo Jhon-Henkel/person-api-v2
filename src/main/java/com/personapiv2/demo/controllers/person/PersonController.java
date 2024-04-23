@@ -32,4 +32,10 @@ public class PersonController {
     public Person readOnePerson(@PathVariable Long id) throws PersonNotFoundException{
         return personService.findById(id);
     }
+
+    @PutMapping("/{id}")
+    public Person updatePerson(@PathVariable Long id, @RequestBody PersonDTO person) throws PersonNotFoundException {
+        Person updatePerson = this.personService.createPerson(person);
+        return personService.update(id, updatePerson);
+    }
 }

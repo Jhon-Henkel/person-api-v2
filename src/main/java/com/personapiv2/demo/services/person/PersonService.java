@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -31,5 +30,12 @@ public class PersonService {
 
     public Person findById(Long id) throws PersonNotFoundException {
         return this.personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+    }
+
+    public Person update(Long id, Person person) throws PersonNotFoundException {
+        Person personToUpdate = this.personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+        personToUpdate.setFullName(person.getFullName());
+        personToUpdate.setBirthDate(person.getBirthDate());
+        return this.personRepository.save(personToUpdate);
     }
 }

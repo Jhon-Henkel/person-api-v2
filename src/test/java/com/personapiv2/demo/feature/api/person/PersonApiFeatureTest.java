@@ -132,4 +132,34 @@ public class PersonApiFeatureTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("Person not found with ID 1")));
     }
+
+    @Test
+    void testUpdatePerson() throws Exception {
+        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+
+        mockMvc.perform(post("/api/v2/person")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(personDTO)))
+                .andExpect(status().isCreated());
+
+        PersonDTO personDTOUpdated = new PersonDTO("Jane Doe Doe", LocalDate.of(2003, Month.APRIL, 16));
+
+        mockMvc.perform(put("/api/v2/person/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(personDTOUpdated)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName", is("Jane Doe Doe")))
+                .andExpect(jsonPath("$.birthDate", is("2003-04-16")));
+    }
+
+    @Test
+    void testUpdatePersonNotFound() throws Exception {
+        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+
+        mockMvc.perform(put("/api/v2/person/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(personDTO)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Person not found with ID 999")));
+    }
 }

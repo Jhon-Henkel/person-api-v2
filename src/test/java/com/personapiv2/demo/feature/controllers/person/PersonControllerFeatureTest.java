@@ -57,4 +57,24 @@ public class PersonControllerFeatureTest {
 
         assertEquals(2, this.personController.readAllPersons().size());
     }
+
+    @Test
+    void testUpdatePerson() throws PersonNotFoundException {
+        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+
+        Person person = this.personController.createPerson(personDTO).getBody();
+
+        assert person != null;
+        Long id = person.getId();
+
+        PersonDTO personDTO2 = new PersonDTO("Jane Doe Doe", LocalDate.of(2003, Month.APRIL, 16));
+
+        this.personController.updatePerson(id, personDTO2);
+
+        Person personUpdated = this.personController.readOnePerson(id);
+
+        assert personUpdated != null;
+        assertEquals("Jane Doe Doe", personUpdated.getFullName());
+        assertEquals("2003-04-16", personUpdated.getBirthDate().toString());
+    }
 }
