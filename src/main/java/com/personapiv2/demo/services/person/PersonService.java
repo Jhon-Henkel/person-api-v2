@@ -2,9 +2,13 @@ package com.personapiv2.demo.services.person;
 
 import com.personapiv2.demo.domain.person.Person;
 import com.personapiv2.demo.dto.person.PersonDTO;
+import com.personapiv2.demo.exception.PersonNotFoundException;
 import com.personapiv2.demo.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -19,5 +23,13 @@ public class PersonService {
 
     private void savePerson(Person person) {
         this.personRepository.save(person);
+    }
+
+    public List<Person> findAll() {
+        return this.personRepository.findAll();
+    }
+
+    public Person findById(Long id) throws PersonNotFoundException {
+        return this.personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
 }
