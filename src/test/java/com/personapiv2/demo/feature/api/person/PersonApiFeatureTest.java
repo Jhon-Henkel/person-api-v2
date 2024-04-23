@@ -1,6 +1,7 @@
 package com.personapiv2.demo.feature.api.person;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.personapiv2.demo.dto.address.AddressDTO;
 import com.personapiv2.demo.dto.person.PersonDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
@@ -32,7 +34,14 @@ public class PersonApiFeatureTest {
 
     @Test
     void testCreatePerson() throws Exception {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         mockMvc.perform(post("/api/v2/person")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -45,6 +54,10 @@ public class PersonApiFeatureTest {
         Map<String, Object> personMap = new HashMap<>();
         personMap.put("fullName", null);
         personMap.put("birthDate", LocalDate.of(2002, Month.MARCH, 30));
+        personMap.put("addresses", List.of(
+                new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+        ));
 
         mockMvc.perform(post("/api/v2/person")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,6 +83,10 @@ public class PersonApiFeatureTest {
         Map<String, Object> personMap = new HashMap<>();
         personMap.put("fullName", "John Doe");
         personMap.put("birthDate", null);
+        personMap.put("addresses", List.of(
+                new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+        ));
 
         mockMvc.perform(post("/api/v2/person")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +116,14 @@ public class PersonApiFeatureTest {
 
     @Test
     void testGetAllPersonsWithPersons() throws Exception {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         mockMvc.perform(post("/api/v2/person")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +139,14 @@ public class PersonApiFeatureTest {
 
     @Test
     void testGetPersonById() throws Exception {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         mockMvc.perform(post("/api/v2/person")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -137,14 +168,28 @@ public class PersonApiFeatureTest {
 
     @Test
     void testUpdatePerson() throws Exception {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         mockMvc.perform(post("/api/v2/person")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(personDTO)))
                 .andExpect(status().isCreated());
 
-        PersonDTO personDTOUpdated = new PersonDTO("Jane Doe Doe", LocalDate.of(2003, Month.APRIL, 16));
+        PersonDTO personDTOUpdated = new PersonDTO(
+                "Jane Doe Doe",
+                LocalDate.of(2003, Month.APRIL, 16),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         mockMvc.perform(put("/api/v2/person/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -156,7 +201,14 @@ public class PersonApiFeatureTest {
 
     @Test
     void testUpdatePersonNotFound() throws Exception {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         mockMvc.perform(put("/api/v2/person/999")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +219,14 @@ public class PersonApiFeatureTest {
 
     @Test
     void testDeletePerson() throws Exception {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         mockMvc.perform(post("/api/v2/person")
                         .contentType(MediaType.APPLICATION_JSON)

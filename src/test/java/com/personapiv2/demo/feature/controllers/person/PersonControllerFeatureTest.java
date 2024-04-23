@@ -2,6 +2,7 @@ package com.personapiv2.demo.feature.controllers.person;
 
 import com.personapiv2.demo.controllers.person.PersonController;
 import com.personapiv2.demo.domain.person.Person;
+import com.personapiv2.demo.dto.address.AddressDTO;
 import com.personapiv2.demo.dto.person.PersonDTO;
 import com.personapiv2.demo.exception.PersonNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,7 +24,14 @@ public class PersonControllerFeatureTest {
 
     @Test
     void testCreatePerson() {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         Person person = this.personController.createPerson(personDTO).getBody();
 
@@ -33,7 +42,14 @@ public class PersonControllerFeatureTest {
 
     @Test
     void testGetPersonById() throws PersonNotFoundException {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         Person person = this.personController.createPerson(personDTO).getBody();
 
@@ -49,11 +65,25 @@ public class PersonControllerFeatureTest {
 
     @Test
     void testGetAllPersons() {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         this.personController.createPerson(personDTO);
 
-        PersonDTO personDTO2 = new PersonDTO("Jane Doe", LocalDate.of(2003, Month.APRIL, 15));
+        PersonDTO personDTO2 = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         this.personController.createPerson(personDTO2);
 
@@ -62,27 +92,50 @@ public class PersonControllerFeatureTest {
 
     @Test
     void testUpdatePerson() throws PersonNotFoundException {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         Person person = this.personController.createPerson(personDTO).getBody();
 
         assert person != null;
         Long id = person.getId();
 
-        PersonDTO personDTO2 = new PersonDTO("Jane Doe Doe", LocalDate.of(2003, Month.APRIL, 16));
+        PersonDTO updatedPersonDTO = new PersonDTO(
+                "Jane Doe Doe",
+                LocalDate.of(2003, Month.APRIL, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
-        this.personController.updatePerson(id, personDTO2);
+        Person updatedPerson = this.personController.updatePerson(id, updatedPersonDTO);
+        assert updatedPerson != null;
 
-        Person personUpdated = this.personController.readOnePerson(id);
+        Person retrievedPerson = this.personController.readOnePerson(id);
 
-        assert personUpdated != null;
-        assertEquals("Jane Doe Doe", personUpdated.getFullName());
-        assertEquals("2003-04-16", personUpdated.getBirthDate().toString());
+        assert retrievedPerson != null;
+        assertEquals("Jane Doe Doe", retrievedPerson.getFullName());
+        assertEquals("2003-04-30", retrievedPerson.getBirthDate().toString());
+        assertEquals(2, retrievedPerson.getAddresses().size());
     }
 
     @Test
     void testDeletePerson() {
-        PersonDTO personDTO = new PersonDTO("John Doe", LocalDate.of(2002, Month.MARCH, 30));
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
 
         Person person = this.personController.createPerson(personDTO).getBody();
 

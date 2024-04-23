@@ -32,10 +32,11 @@ public class PersonService {
         return this.personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
 
-    public Person update(Long id, Person person) throws PersonNotFoundException {
+    public Person update(Long id, PersonDTO person) throws PersonNotFoundException {
         Person personToUpdate = this.personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
-        personToUpdate.setFullName(person.getFullName());
-        personToUpdate.setBirthDate(person.getBirthDate());
+        personToUpdate.setFullName(person.fullName());
+        personToUpdate.setBirthDate(person.birthDate());
+        personToUpdate.setAddresses(person.addresses());
         return this.personRepository.save(personToUpdate);
     }
 

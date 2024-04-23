@@ -35,8 +35,7 @@ public class PersonController {
 
     @PutMapping("/{id}")
     public Person updatePerson(@PathVariable Long id, @RequestBody PersonDTO person) throws PersonNotFoundException {
-        Person updatePerson = this.personService.createPerson(person);
-        return personService.update(id, updatePerson);
+        return personService.update(id, person);
     }
 
     @DeleteMapping("/{id}")
