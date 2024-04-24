@@ -38,7 +38,6 @@ public class Person {
     public Person(PersonDTO person) {
         this.fullName = person.fullName();
         this.birthDate = person.birthDate();
-        this.addresses = new ArrayList<>();
         for (AddressDTO address : person.addresses()) {
             this.addresses.add(new Address(address));
         }

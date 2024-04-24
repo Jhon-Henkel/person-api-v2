@@ -1,7 +1,10 @@
 package com.personapiv2.demo.dto.address;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.personapiv2.demo.domain.address.Address;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public record AddressDTO(
@@ -17,5 +20,19 @@ public record AddressDTO(
         Objects.requireNonNull(number, "number must not be null");
         Objects.requireNonNull(city, "city must not be null");
         Objects.requireNonNull(mainAddress, "mainAddress must not be null");
+    }
+
+    public static List<AddressDTO> fromDomain(List<Address> addresses) {
+        List<AddressDTO> newAddresses = new ArrayList<>();
+        for (Address address : addresses) {
+            newAddresses.add(new AddressDTO(
+                    address.getPublicPlace(),
+                    address.getZipCode(),
+                    address.getNumber(),
+                    address.getCity(),
+                    address.getMainAddress()
+            ));
+        }
+        return newAddresses;
     }
 }
