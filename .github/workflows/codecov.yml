@@ -32,13 +32,6 @@ jobs:
       - name: Test with Maven and generate coverage report
         run: mvn test jacoco:report
 
-  codecov:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
