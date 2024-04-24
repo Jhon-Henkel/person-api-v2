@@ -265,26 +265,26 @@ public class AddressApiFeatureTest {
                 .andExpect(jsonPath("$.message", is("Person not found with ID 9999")));
     }
 
-//    @Test
-//    public void testCreatePersonAddress() throws Exception {
-//        PersonDTO personDTO = new PersonDTO(
-//                "John Doe",
-//                LocalDate.of(2002, Month.MARCH, 30),
-//                List.of(
-//                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
-//                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
-//                )
-//        );
-//
-//        Person person = personRepository.save(new Person(personDTO));
-//
-//        mockMvc.perform(post("/api/v2/address/person/" + person.getId())
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(new AddressDTO("Rua 3", 123456, 123, "Cidade 1", true)))
-//        ).andExpect(status().isOk());
-//
-//        Person personUpdated = personController.readOnePerson(person.getId());
-//
-//        assert personUpdated.getAddresses().size() == 3;
-//    }
+    @Test
+    public void testDeleteAddress() throws Exception {
+        PersonDTO personDTO = new PersonDTO(
+                "John Doe",
+                LocalDate.of(2002, Month.MARCH, 30),
+                List.of(
+                        new AddressDTO("Rua 1", 123456, 123, "Cidade 1", true),
+                        new AddressDTO("Rua 2", 654321, 321, "Cidade 2", false)
+                )
+        );
+
+        Person person = personRepository.save(new Person(personDTO));
+
+        Optional<Address> address = person.getAddresses().stream().findFirst();
+
+        mockMvc.perform(delete("/api/v2/address/" + address.get().getId()))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/v2/address/person/" + person.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(1)));
+    }
 }
